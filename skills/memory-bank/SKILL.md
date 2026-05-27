@@ -12,14 +12,14 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
 记忆分为 **全局记忆** 和 **项目记忆** 两层，全部采用标准 Markdown 文件存储：
 
 ### 1. 全局记忆 (跨项目通用)
-- **存储路径**: `/Users/ethanshen/.gemini/memory-bank/` (用户根目录下的通用目录)
+- **存储路径**: `~/.claude/cc-memory-bank/` (用户根目录下的通用目录)
 - **核心文件**:
   - `preferences.md`: 记录用户个人偏好、编码风格、开发习惯、常用命令。
   - `conventions.md`: 记录通用的规范、命名约定、最佳实践、通用安全规则。
   - `decisions.md`: 记录跨项目的重要技术决策或思考沉淀。
 
 ### 2. 项目记忆 (当前工作区独立)
-- **存储路径**: `<当前工作区根目录>/.memory-bank/` (例如 `/Users/ethanshen/Desktop/LLM/my-memory/.memory-bank/`)
+- **存储路径**: `<当前工作区根目录>/.memory-bank/` (例如 `~/Desktop/my-project/.memory-bank/`)
 - **核心文件**:
   - `brief.md`: 项目概览、核心需求、一句话愿景。
   - `product.md`: 产品目标、用户体验、“为什么”要做这个产品。
@@ -57,12 +57,12 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
 
 ### 3. 全局保存指令 (`save to global` / `保存全局` / `保存全局记忆`)
 - **触发条件**: 用户明确要求保存到全局时。
-- **行为逻辑**: 提取出的知识（如通用编码偏好、特定工具的避坑指南）将强制写入全局路径 `/Users/ethanshen/.gemini/memory-bank/` 下的对应文件。
+- **行为逻辑**: 提取出的知识（如通用编码偏好、特定工具的避坑指南）将强制写入全局路径 `~/.claude/cc-memory-bank/` 下的对应文件。
 
 ### 4. 主动回忆指令 (`recall` / `回忆` / `load memory`)
 - **触发条件**: 用户手动输入指令，或者在新会话启动、用户更换工作区时。
 - **行为逻辑**:
-  1. **读取全局记忆**: 自动读取全局目录 `/Users/ethanshen/.gemini/memory-bank/` 下的 `preferences.md` 和 `conventions.md`。
+  1. **读取全局记忆**: 自动读取全局目录 `~/.claude/cc-memory-bank/` 下的 `preferences.md` 和 `conventions.md`。
   2. **读取项目记忆**: 自动读取当前项目根目录下 `.memory-bank/` 下的 `brief.md`、`active.md`、`architecture.md`、`progress.md`、`tech.md`。
   3. **环境适应**: 将读取的内容作为上下文背景默默吸收，并在后续回复和代码编写中严格遵守。除非用户要求，无需将读取的内容长篇大论地复述给用户，只需在后续行动中展现出“你已经记住了”。
 
