@@ -19,7 +19,7 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
   - `decisions.md`: 记录跨项目的重要技术决策或思考沉淀。
 
 ### 2. 项目记忆 (当前工作区独立)
-- **存储路径**: `<当前工作区根目录>/.memory-bank/` (例如 `~/Desktop/my-project/.memory-bank/`)
+- **存储路径**: `<当前工作区根目录>/.cc-memory-bank/` (例如 `~/Desktop/my-project/.cc-memory-bank/`)
 - **核心文件**:
   - `brief.md`: 项目概览、核心需求、一句话愿景。
   - `product.md`: 产品目标、用户体验、“为什么”要做这个产品。
@@ -63,7 +63,7 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
 - **触发条件**: 用户手动输入指令，或者在新会话启动、用户更换工作区时。
 - **行为逻辑**:
   1. **读取全局记忆**: 自动读取全局目录 `~/.claude/cc-memory-bank/` 下的 `preferences.md` 和 `conventions.md`。
-  2. **读取项目记忆**: 自动读取当前项目根目录下 `.memory-bank/` 下的 `brief.md`、`active.md`、`architecture.md`、`progress.md`、`tech.md`。
+  2. **读取项目记忆**: 自动读取当前项目根目录下 `.cc-memory-bank/` 下的 `brief.md`、`active.md`、`architecture.md`、`progress.md`、`tech.md`。
   3. **环境适应**: 将读取的内容作为上下文背景默默吸收，并在后续回复和代码编写中严格遵守。除非用户要求，无需将读取的内容长篇大论地复述给用户，只需在后续行动中展现出“你已经记住了”。
 
 ### 5. 任务完成自动归档 (自动保存)
@@ -72,7 +72,7 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
   - 特别是当你创建或更新了 `walkthrough.md` 或将 `task.md` 中的任务全部标记为 `[x]` 时。
 - **行为逻辑**:
   1. 自动触发记忆归档程序。
-  2. 读取项目级 `.memory-bank/progress.md` 和 `.memory-bank/active.md`。
+  2. 读取项目级 `.cc-memory-bank/progress.md` 和 `.cc-memory-bank/active.md`。
   3. 将本次任务完成的内容从 "待办/进行中" 移动到 "已完成" 列表中。
   4. 清理 `active.md` 中的当前焦点，将其更新为下一步的建议待办。
   5. 默默更新文件，并在最终的总结中轻量提一句：“已自动将任务进度归档至 Memory Bank。”
