@@ -1,4 +1,4 @@
-# Memory Bank Plugin for Antigravity IDE
+# Memory Bank Plugin
 
 一个类 Cline 风格的零依赖、纯 Markdown 文件的跨会话记忆系统。
 
