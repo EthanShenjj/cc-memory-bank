@@ -1,8 +1,8 @@
 {
-  "name": "memory-bank",
+  "name": "cc-memory-bank",
   "description": "Cline-style Memory Bank for cross-session context. Supports global and project-scoped memory with quick-save triggers.",
   "version": "1.0.0",
   "skills": [
-    "skills/memory-bank"
+    "skills/cc-memory-bank"
   ]
 }

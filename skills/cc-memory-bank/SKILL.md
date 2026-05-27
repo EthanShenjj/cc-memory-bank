@@ -1,5 +1,5 @@
 ---
-name: memory-bank
+name: cc-memory-bank
 description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支持全局和项目级记忆的自动与手动存取，内置 index 导航、log 时间线、lint 健康检查与答案回写。
 ---
 
