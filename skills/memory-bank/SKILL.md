@@ -66,7 +66,25 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
   2. **读取项目记忆**: 自动读取当前项目根目录下 `.cc-memory-bank/` 下的 `brief.md`、`product.md`、`active.md`、`architecture.md`、`progress.md`、`tech.md`。
   3. **环境适应**: 将读取的内容作为上下文背景默默吸收，并在后续回复和代码编写中严格遵守。除非用户要求，无需将读取的内容长篇大论地复述给用户，只需在后续行动中展现出“你已经记住了”。
 
-### 5. 任务完成自动归档 (自动保存)
+### 5. 跨项目导入指令 (`/ss-memory-bank: <项目路径>`)
+- **触发条件**: 用户输入 `/ss-memory-bank:` 后跟一个本地项目路径，例如 `/ss-memory-bank: ~/Desktop/my-project`。
+- **行为逻辑**:
+  1. **解析路径**: 提取指令中的项目路径，展开 `~` 为完整绝对路径。
+  2. **读取项目记忆**: 使用 `Read` 工具依次读取该路径下 `.cc-memory-bank/` 中存在的所有文件（`brief.md`、`product.md`、`architecture.md`、`tech.md`、`progress.md`、`active.md`），跳过不存在的文件。
+  3. **智能合并到全局**: 将读取到的内容按以下映射规则合并写入全局 `~/.claude/cc-memory-bank/`：
+     - `brief.md` / `product.md` → 全局 `decisions.md`（以项目名为标题追加一节）
+     - `architecture.md` → 全局 `decisions.md`（追加架构决策小节）
+     - `tech.md` / `preferences.md` → 全局 `conventions.md`（追加技术规范小节）
+     - `progress.md` / `active.md` → 全局 `decisions.md`（追加项目背景与进度摘要小节）
+  4. **标注来源**: 每条合并内容须标注来源路径和导入日期，格式为：
+     > `<!-- 导入自: <项目路径>/.cc-memory-bank/<文件名> | 日期: YYYY-MM-DD -->`
+  5. **确认反馈**: 完成后输出简洁汇总，例如：
+     > ✅ **已将项目记忆导入全局 Memory Bank！**
+     > - 来源: `~/Desktop/my-project/.cc-memory-bank/`
+     > - 合并了 [architecture.md](file://<path>) → 全局 decisions.md
+     > - 合并了 [tech.md](file://<path>) → 全局 conventions.md
+
+### 6. 任务完成自动归档 (自动保存)
 - **触发条件**:
   - 当你在当前会话中成功完成了某个复杂的开发任务。
   - 特别是当你创建或更新了 `walkthrough.md` 或将 `task.md` 中的任务全部标记为 `[x]` 时。
