@@ -1,8 +1,7 @@
 {
   "name": "cc-memory-bank",
-  "description": "Cline-style Memory Bank for cross-session context. Supports global and project-scoped memory with quick-save triggers.",
-  "version": "1.0.0",
-  "skills": [
-    "skills/cc-memory-bank"
-  ]
+  "description": "Cline-style Memory Bank for cross-session context. Supports global and project-scoped memory with quick-save triggers, index navigation, log timeline, lint health check, and insight filing.",
+  "author": {
+    "name": "EthanShenjj"
+  }
 }
