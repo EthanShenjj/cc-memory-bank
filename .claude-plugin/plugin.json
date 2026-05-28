@@ -1,10 +1,10 @@
 {
-  "name": "cc-memory-bank",
+  "name": "my-memory-bank",
   "description": "Cline-style Memory Bank for cross-session context. Supports global and project-scoped memory with quick-save triggers, index navigation, log timeline, lint health check, and insight filing.",
   "author": {
     "name": "EthanShenjj"
   },
   "skills": [
-    "skills/cc-memory-bank"
+    "skills/my-memory-bank"
   ]
 }
