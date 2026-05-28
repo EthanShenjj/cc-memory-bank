@@ -20,31 +20,45 @@
 
 ## 📂 存储目录
 
+记忆以**目录分类**组织。安装后首次使用时自动初始化预置目录；遇到不属于现有目录的内容时，自动创建新目录。
+
 ### 1. 全局记忆 (跨项目通用)
 存储在 `~/.claude/cc-memory-bank/`
 
-| 文件 | 用途 |
-|------|------|
-| `preferences.md` | 开发偏好、UI 审美、代码注释习惯 |
-| `conventions.md` | 通用规范、接口标准、安全规则 |
-| `decisions.md` | 跨项目重要决策与方向沉淀 |
-| `index.md` | **检索入口** — 所有文件的摘要目录 |
-| `log.md` | **操作时间线** — 追加式操作记录 |
+```
+~/.claude/cc-memory-bank/
+├── index.md          # 检索入口
+├── log.md            # 操作时间线
+├── preferences/      # 开发偏好、UI 审美、代码习惯
+├── conventions/      # 通用规范、接口标准、安全规则
+└── decisions/        # 跨项目重要决策与方向沉淀
+```
 
 ### 2. 项目记忆 (当前项目独立)
 存储在 `<project-root>/.cc-memory-bank/`
 
-| 文件 | 用途 |
-|------|------|
-| `brief.md` | 项目核心诉求与概览 |
-| `product.md` | 产品目标与用户体验追求 |
-| `architecture.md` | 选型及架构设计决策 |
-| `tech.md` | 技术栈、核心依赖与编译部署指令 |
-| `progress.md` | 整体任务进度（Completed & Todo） |
-| `active.md` | 当前工作焦点与近期变更 |
-| `insights/` | 归档的分析结论、对比报告 |
-| `index.md` | **检索入口** — 所有文件的摘要目录 |
-| `log.md` | **操作时间线** — 追加式操作记录 |
+```
+.cc-memory-bank/
+├── index.md          # 检索入口
+├── log.md            # 操作时间线
+├── overview/         # 项目概览：brief、product 目标
+├── engineering/      # 技术工程：architecture、tech 栈
+├── progress/         # 进度追踪：progress、active 焦点
+└── insights/         # 分析洞察：YYYY-MM-DD-<标题>.md
+```
+
+### 3. 动态目录扩展
+
+当内容不属于任何预置目录时，AI 会自动推断并创建新目录：
+
+| 内容类型 | 自动创建的目录 |
+|----------|---------------|
+| API 接口文档 | `api/` |
+| 安全策略、漏洞记录 | `security/` |
+| 团队流程、协作规范 | `team/` |
+| 运营数据、业务指标 | `metrics/` |
+| 用户研究、访谈记录 | `research/` |
+| 部署配置、环境说明 | `devops/` |
 
 ---
 
