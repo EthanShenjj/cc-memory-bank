@@ -1,6 +1,6 @@
 ---
 name: my-memory-bank
-description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支持全局和项目级记忆的自动与手动存取，内置目录分类、index 导航、log 时间线、lint 健康检查与答案回写。
+description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支持全局和项目级记忆的自动与手动存取，内置目录分类、index 导航、log 时间线、lint 健康检查、答案回写与原始对话语料存档。
 ---
 
 # Memory Bank 行为指南 (SKILL)
@@ -37,7 +37,8 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
 ├── overview/                 # 项目概览：brief、product 目标
 ├── engineering/              # 技术工程：architecture、tech 栈
 ├── progress/                 # 进度追踪：progress、active 焦点
-└── insights/                 # 分析洞察：YYYY-MM-DD-<标题>.md
+├── insights/                 # 分析洞察：YYYY-MM-DD-<标题>.md
+└── raw/                      # 原始对话语料：YYYY-MM-DD-HH-MM-<标题>.md（完整未提炼）
 ```
 
 ### 3. 动态目录扩展
@@ -82,7 +83,7 @@ description: 类 Cline 风格的零依赖、纯文件跨会话记忆系统。支
 5. 确认输出：
    > 🗂️ Memory Bank 已初始化
    > - 全局: ~/.claude/cc-memory-bank/（preferences/ conventions/ decisions/）
-   > - 项目: .cc-memory-bank/（overview/ engineering/ progress/ insights/）
+   > - 项目: .cc-memory-bank/（overview/ engineering/ progress/ insights/ raw/）
 ```
 
 **全局预置目录初始化命令**（AI 通过 Bash 工具执行）:
@@ -92,7 +93,7 @@ mkdir -p ~/.claude/cc-memory-bank/{preferences,conventions,decisions}
 
 **项目预置目录初始化命令**:
 ```bash
-mkdir -p .cc-memory-bank/{overview,engineering,progress,insights}
+mkdir -p .cc-memory-bank/{overview,engineering,progress,insights,raw}
 ```
 
 ---
@@ -126,6 +127,7 @@ index.md 是检索的入口，它的质量直接决定记忆能否被找到。�
      - 用户偏好 → 全局 `preferences/`
      - 项目概览/愿景 → `overview/`
      - **不属于任何预置目录** → 执行动态目录创建（见一·3节）
+     - **原始对话存档** → `raw/`（见第三节·9）
   3. `Read` 目标文件（如存在） → `Edit` 增量写入（禁止整体覆盖）；文件不存在时用 `Write` 以模板初始化。
   4. 更新 `index.md`（若目录或文件摘要有变化）。
   5. 向 `log.md` 追加：`## [YYYY-MM-DD] save | <本次保存内容的一句话摘要>`。
@@ -196,6 +198,44 @@ index.md 是检索的入口，它的质量直接决定记忆能否被找到。�
   3. 更新 `index.md`，追加 `log.md`。
   4. 在最终总结中轻描一句："已自动将任务进度归档至 Memory Bank。"
 
+### 9. 原始对话存档 (`/raw-save: <标题>` 或 `保存原始对话`)
+- **触发**: 用户输入 `/raw-save: <标题>` 或 `保存原始对话`，或用户明确要求保留完整对话语料。
+- **设计原则**: `raw/` 存储的是**原始语料**，不做任何提炼、摘要或内容裁剪。保存的完整度优先于简洁性。这与 `insights/`（精炼结论）、`/cc`（要点摘取）的定位完全不同。
+- **流程**:
+  1. 若 `raw/` 目录不存在，先创建：`mkdir -p .cc-memory-bank/raw`。
+  2. 文件命名规则：`YYYY-MM-DD-HH-MM-<标题>.md`（精确到分钟，避免同日文件冲突）。
+  3. 按以下格式将**完整对话**写入文件，不截断、不压缩任何内容：
+     ```markdown
+     # <标题>
+
+     > 存档时间: YYYY-MM-DD HH:MM
+     > 来源: <项目名 / 会话描述>
+
+     ---
+
+     **[User]**
+     <用户原始消息，逐条完整保留>
+
+     ---
+
+     **[Assistant]**
+     <助手完整回复，包含代码块、工具调用描述、分析过程>
+
+     ---
+
+     （以上格式循环，覆盖整个会话）
+     ```
+  4. 在 `index.md` 的「文件清单」表新增一行，摘要注明：原始语料 + 主题关键词。
+  5. 追加 `log.md`：`## [YYYY-MM-DD] raw | 存档「<标题>」→ raw/YYYY-MM-DD-HH-MM-<标题>.md`。
+  6. 确认反馈：
+     > 📄 **原始对话已存档**
+     > - `raw/YYYY-MM-DD-HH-MM-<标题>.md` 已创建（完整语料，未提炼）
+
+- **注意事项**:
+  - `raw/` 文件只写入、不编辑（历史语料不可篡改）；若需补充，新建文件。
+  - 文件大小可能较大，`recall` 流程不主动加载 `raw/`，除非用户明确要求。
+  - 同一主题可多次存档，文件名含时间戳可自然区分版本。
+
 ---
 
 ## 四、index.md 规范
@@ -214,6 +254,7 @@ index.md 是检索的入口，它的质量直接决定记忆能否被找到。�
 | [preferences/](preferences/) | 用户偏好：编码风格、审美倾向 | 2026-05-27 |
 | [conventions/](conventions/) | 通用规范：命名约定、Git 提交格式 | 2026-05-27 |
 | [decisions/](decisions/) | 跨项目决策：选择零依赖记忆方案 | 2026-05-27 |
+| [raw/](raw/) | 原始对话语料：完整未提炼的会话存档 | 2026-05-27 |
 
 ## 文件清单
 
@@ -222,6 +263,7 @@ index.md 是检索的入口，它的质量直接决定记忆能否被找到。�
 | [preferences/coding.md](preferences/coding.md) | 首选 Vanilla CSS、模块化 JS | 2026-05-27 |
 | [decisions/tech.md](decisions/tech.md) | 选择零依赖 Markdown 方案 | 2026-05-27 |
 | [insights/2026-05-27-xxx.md](insights/2026-05-27-xxx.md) | xxx 对比分析结论 | 2026-05-27 |
+| [raw/2026-05-27-14-30-xxx.md](raw/2026-05-27-14-30-xxx.md) | 原始语料：xxx 功能讨论完整对话 | 2026-05-27 |
 ```
 
 **更新规则**:
@@ -238,16 +280,17 @@ index.md 是检索的入口，它的质量直接决定记忆能否被找到。�
 ```markdown
 # 操作日志
 
-## [2026-05-27] init | 初始化 Memory Bank，创建 overview/ engineering/ progress/ insights/
+## [2026-05-27] init | 初始化 Memory Bank，创建 overview/ engineering/ progress/ insights/ raw/
 ## [2026-05-27] save | 记录 React 状态管理决策 → engineering/architecture.md
 ## [2026-05-27] mkdir | 新建动态目录 api/，保存接口文档
 ## [2026-05-27] recall | 加载了 index.md、engineering/architecture.md
 ## [2026-05-27] insight | 归档「Redux vs Zustand 对比分析」→ insights/
 ## [2026-05-27] import | ~/Desktop/old-project/.cc-memory-bank/
 ## [2026-05-27] lint | 发现 2 个问题，修复 1 个（index.md 补漏）
+## [2026-05-27] raw | 存档「Memory Bank 功能讨论」→ raw/2026-05-27-14-30-memory-bank.md
 ```
 
-格式固定为 `## [YYYY-MM-DD] <操作类型> | <一句话描述>`。操作类型包括：`init` / `save` / `mkdir` / `recall` / `insight` / `import` / `lint`。
+格式固定为 `## [YYYY-MM-DD] <操作类型> | <一句话描述>`。操作类型包括：`init` / `save` / `mkdir` / `recall` / `insight` / `import` / `lint` / `raw`。
 
 ---
 
